@@ -1,1 +1,2 @@
-# mpd-grupo3-2017-18
+# vibehub
+Didactic work item for MPD  course

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>movlazy.model</OriginalElement>
+  <nodes>
+    <node x="-380.0" y="5.0">movlazy.model.SearchItem</node>
+    <node x="-8.0" y="469.0">movlazy.model.Actor</node>
+    <node x="384.0" y="9.0">movlazy.model.CastItem</node>
+    <node x="0.0" y="0.0">movlazy.model.Movie</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="303.0" y="297.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

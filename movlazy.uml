@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>movlazy</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">util.Queries</node>
+    <node x="5.227134695029918" y="1592.9913713350977">util.IRequest</node>
+    <node x="-692.1635761958001" y="-16.314353976104712">movlazy.MovService</node>
+    <node x="22.073603452062144" y="1961.0593383785827">util.HttpRequest</node>
+    <node x="12.81923248887719" y="1141.784454047074">movlazy.MovWebApi</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="movlazy.MovService" target="movlazy.MovWebApi">
+      <point x="-5.004551421934725" y="-5.6843418860808015E-14" />
+      <point x="-5.004551421934724" y="-0.0" />
+    </edge>
+    <edge source="movlazy.MovService" target="util.Queries">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="util.HttpRequest" target="util.IRequest">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="movlazy.MovWebApi" target="util.IRequest">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.40000000000000013" x="594.0000000000002" y="494.0" />
+  <SelectedNodes>
+    <node>movlazy.MovService</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
