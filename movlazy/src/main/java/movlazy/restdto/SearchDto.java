@@ -6,7 +6,6 @@ public class SearchDto {
 
     private final SearchItemDto[] results;
 
-
     public SearchDto(SearchItemDto[] results) {
         this.results = results;
     }

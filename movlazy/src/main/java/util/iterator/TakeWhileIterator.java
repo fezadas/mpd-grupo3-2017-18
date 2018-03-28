@@ -12,18 +12,18 @@ import static util.Box.of;
 public class TakeWhileIterator<T> implements Iterator<T> {
     final Predicate<T> p;
     final Iterator<T> src;
-    boolean end;
+    boolean predicate;
     Box<T> curr;
 
     public TakeWhileIterator(Iterable<T> src, Predicate<T> p) {
         this.src = src.iterator();
         this.p = p;
         curr = empty();
-        end = false;
+        predicate = true;
     }
 
     public boolean hasNext() {
-        if (end) return false;
+        if (!predicate) return false;
         if (curr.isPresent()) return true;
         while (src.hasNext()) {
             T item = src.next();
@@ -31,7 +31,7 @@ public class TakeWhileIterator<T> implements Iterator<T> {
                 curr = of(item);
                 return true;
             } else
-                return end = true;
+                return predicate = false;
         }
         return false;
     }

@@ -9,28 +9,35 @@ public class FlatMapIterator<T,R> implements Iterator<R> {
     final Iterator<T> src;
     private Iterator<R> currScr;
     private R currValue;
-
+    private boolean consumed;
 
     public FlatMapIterator(Iterable<T> src, Function<T, Iterable<R>> mapper) {
         this.src = src.iterator();
         this.mapper = mapper;
-
+        this.consumed = true;
     }
 
     public boolean hasNext() {
-        if(currValue==null && src.hasNext()) {
-            currScr = mapper.apply(src.next()).iterator();
-            if(currScr.hasNext())
-                currValue = currScr.next();
-            else
-                currValue = null;
+        if (!consumed) return true;
+        if (currValue==null){
+            if (src.hasNext())
+                currScr = mapper.apply(src.next()).iterator();
+            else return false;
         }
-        return false;
+        if(currScr.hasNext()){
+            currValue = currScr.next();
+            consumed = false;
+        }
+        else
+            currValue = null;
+        return true;
     }
 
     public R next() {
         if (!hasNext()) throw new NoSuchElementException();
-        return currValue;
+        consumed = true;
+        R val = currValue;
+        if(!currScr.hasNext())currValue=null;
+        return val;
     }
-
 }

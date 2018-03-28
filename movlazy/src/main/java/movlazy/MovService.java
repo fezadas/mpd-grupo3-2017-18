@@ -17,16 +17,16 @@
 
 package movlazy;
 
+import movlazy.dto.CastItemDto;
 import movlazy.dto.MovieDto;
+import movlazy.dto.PersonDto;
 import movlazy.dto.SearchItemDto;
 import movlazy.model.Actor;
 import movlazy.model.CastItem;
 import movlazy.model.Movie;
 import movlazy.model.SearchItem;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static util.Queries.flatMap;
 import static util.Queries.iterate;
@@ -93,16 +93,35 @@ public class MovService {
 
     public List<CastItem> getMovieCast(int movId) {
         return cast.computeIfAbsent(movId, id -> {
-            throw new UnsupportedOperationException();
+            CastItemDto[] cast = movWebApi.getMovieCast(movId);
+            List<CastItem> castItemList = new LinkedList<>();
+            for (CastItemDto elem : cast) {
+                castItemList.add(
+                        new CastItem(
+                                elem.getId(),
+                                movId,
+                                elem.getCharacter(),
+                                elem.getName(),
+                                ()->getActor(elem.getId(),elem.getName())));
+            }
+            return castItemList;
         });
     }
 
     public Actor getActor(int actorId, String name) {
-        throw new UnsupportedOperationException();
+        return actors.computeIfAbsent(id -> {
+            PersonDto person = movWebApi.getPerson(actorId);
+            return new Actor(
+                    person.getId(),
+                    person.getName(),
+                    person.getBiography(),
+                    person.getPlace_of_birth(),
+                    );
+        });
     }
 
     public Iterable<SearchItem> getActorCreditsCast(int actorId) {
-        throw new UnsupportedOperationException();
+        Iterable<Integer> m = new ArrayList<>();
     }
 
 }

@@ -18,7 +18,11 @@
 package test;
 
 import org.junit.jupiter.api.Test;
+import util.iterator.FlatMapIterator;
+import util.iterator.TakeWhileIterator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 import static java.util.Arrays.asList;

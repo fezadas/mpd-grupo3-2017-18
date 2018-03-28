@@ -18,4 +18,31 @@
 package movlazy.dto;
 
 public class PersonDto {
+    private int id;
+    private String name;
+    private String place_of_birth;
+    private String biography;
+
+    public PersonDto(int id, String name, String place_of_birth, String biography) {
+        this.id = id;
+        this.name = name;
+        this.place_of_birth = place_of_birth;
+        this.biography = biography;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPlace_of_birth() {
+        return place_of_birth;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
 }

@@ -157,7 +157,6 @@ public class MovServiceTestForWarGames {
         assertEquals(12, count[0]); // 1 request for Movie + 1 for CastItems + 1 Person + 1 Actor Credits
     }
 
-
     @Test
     public void testSearchMovieWithManyPages() {
         final RateLimiter rateLimiter = RateLimiter.create(3.0);

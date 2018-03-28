@@ -22,6 +22,7 @@ import movlazy.dto.CastItemDto;
 import movlazy.dto.MovieDto;
 import movlazy.dto.PersonDto;
 import movlazy.dto.SearchItemDto;
+import movlazy.restdto.CastDto;
 import movlazy.restdto.SearchDto;
 import util.IRequest;
 import util.iterator.InputStreamIterator;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.MessageFormat;
 
 import static util.Queries.map;
 import static util.Queries.reduce;
@@ -47,7 +49,7 @@ public class MovWebApi {
      * To format messages URLs use {@link java.text.MessageFormat#format(String, Object...)} method.
      */
     private static final String MOVIE_DB_HOST = "https://api.themoviedb.org/3/";
-    private static final String MOVIE_DB_SEARCH = "search/movie?api_key={0}&query{1}=&page={2}";
+    private static final String MOVIE_DB_SEARCH = "search/movie?api_key={0}&query={1}&page={2}";
     private static final String MOVIE_DB_MOVIE = "movie/{1}?api_key={0}";
     private static final String MOVIE_DB_MOVIE_CREDITS = "movie/{1}/credits?api_key={0}";
     private static final String MOVIE_DB_PERSON = "person/{1}?api_key={0}";
@@ -56,8 +58,6 @@ public class MovWebApi {
 
     private final IRequest req;
     private final Gson gson = new Gson();
-
-
 
     static {
 
@@ -79,25 +79,21 @@ public class MovWebApi {
 
     }
 
-
-
     /*
      * Constructors
      */
     public MovWebApi(IRequest req) {
-        this.req = null;
+        this.req = req;
     }
 
     /**
      * E.g. https://api.themoviedb.org/3/search/movie?api_key=***************&query=war+games
      */
     public SearchItemDto[] search(String title, int page) {
-        String url = MOVIE_DB_HOST+MOVIE_DB_SEARCH;
-        String.format(url,MOVIE_DB_TOKEN,title,page);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_SEARCH,MOVIE_DB_TOKEN, title.replaceAll(" ", "+"), page);
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         SearchDto dto = gson.fromJson(json, SearchDto.class);
-
         return dto.getResults();
     }
 
@@ -105,27 +101,42 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/movie/860?api_key=***************
      */
     public MovieDto getMovie(int id) {
-        throw new UnsupportedOperationException();
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE,MOVIE_DB_TOKEN,id);
+        Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
+        String json = reduce(scr, "", (prev, curr) -> prev+curr );
+        return gson.fromJson(json, MovieDto.class);
     }
 
     /**
      * E.g. https://api.themoviedb.org/3/movie/860/credits?api_key=***************
      */
     public CastItemDto[] getMovieCast(int movieId) {
-        throw new UnsupportedOperationException();
+
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE_CREDITS,MOVIE_DB_TOKEN, movieId);
+        Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
+        String json = reduce(scr, "", (prev, curr) -> prev+curr );
+        CastDto dto = gson.fromJson(json, CastDto.class);
+        return dto.getCast();
     }
 
     /**
      * E.g. https://api.themoviedb.org/3/person/4756?api_key=***************
      */
     public PersonDto getPerson(int personId) {
-        throw new UnsupportedOperationException();
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON,MOVIE_DB_TOKEN,personId);
+        Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
+        String json = reduce(scr, "", (prev, curr) -> prev+curr );
+        return gson.fromJson(json, PersonDto.class);
     }
 
     /**
      * E.g. https://api.themoviedb.org/3/person/4756/movie_credits?api_key=***************
      */
     public SearchItemDto[] getPersonCreditsCast(int personId) {
-        throw new UnsupportedOperationException();
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON_CREDITS,MOVIE_DB_TOKEN,personId);
+        Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
+        String json = reduce(scr, "", (prev, curr) -> prev+curr );
+        SearchDto dto = gson.fromJson(json, SearchDto.class);
+        return dto.getResults();
     }
 }
