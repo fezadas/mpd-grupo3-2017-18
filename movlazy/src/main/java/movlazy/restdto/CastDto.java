@@ -3,7 +3,6 @@ package movlazy.restdto;
 import movlazy.dto.CastItemDto;
 
 public class CastDto {
-
     private final CastItemDto[] cast;
 
     public CastDto(CastItemDto[] cast) {

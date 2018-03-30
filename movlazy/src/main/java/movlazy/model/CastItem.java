@@ -14,7 +14,6 @@ public class CastItem {
     private final String name;
     private final Supplier<Actor> actor;
 
-
     public CastItem(int id, int movieId, String character, String name, Supplier<Actor> actor) {
         this.id = id;
         this.movieId = movieId;

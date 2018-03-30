@@ -25,7 +25,10 @@ import movlazy.model.Actor;
 import movlazy.model.CastItem;
 import movlazy.model.Movie;
 import movlazy.model.SearchItem;
+import util.Queries;
+import util.iterator.ArrayIterator;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static util.Queries.flatMap;
@@ -56,7 +59,7 @@ public class MovService {
             flatMap(             // Iterable<SearchItemDto>
                 movs -> of(movs),
                 takeWhile(       // Iterable<SearchItemDto[]>
-                    movs -> movs.length != 0, //FIXME: Retorna o array results vazio, quando já não mais info. para mostrar
+                    movs -> movs.length != 0,
                     map(         // Iterable<SearchItemDto[]>
                         page -> movWebApi.search(name, page),
                         iterate( // Iterable<Integer>
@@ -93,35 +96,47 @@ public class MovService {
 
     public List<CastItem> getMovieCast(int movId) {
         return cast.computeIfAbsent(movId, id -> {
-            CastItemDto[] cast = movWebApi.getMovieCast(movId);
+            CastItemDto[] cast = movWebApi.getMovieCast(id);
+            //return map(this::parseCastItemDto, of(cast));     //FIXME
             List<CastItem> castItemList = new LinkedList<>();
             for (CastItemDto elem : cast) {
                 castItemList.add(
                         new CastItem(
                                 elem.getId(),
-                                movId,
+                                id,
                                 elem.getCharacter(),
                                 elem.getName(),
-                                ()->getActor(elem.getId(),elem.getName())));
+                                () -> getActor(elem.getId(), elem.getName())));
             }
             return castItemList;
         });
     }
 
+    /*
+    private CastItem parseCastItemDto(CastItem dto) {
+        return new CastItem(
+                dto.getId(),
+                dto.getMovieId(),
+                dto.getCharacter(),
+                dto.getName(),
+                dto::getActor
+        );
+    }
+    */
+
     public Actor getActor(int actorId, String name) {
-        return actors.computeIfAbsent(id -> {
+        return actors.computeIfAbsent(actorId, id -> {
             PersonDto person = movWebApi.getPerson(actorId);
             return new Actor(
                     person.getId(),
-                    person.getName(),
-                    person.getBiography(),
+                    person.getName(), //FIXME: name?
                     person.getPlace_of_birth(),
-                    );
+                    person.getBiography(),
+                    () -> getActorCreditsCast(actorId)); //TODO: alterou-se para suppiler, é possivel?
         });
     }
 
     public Iterable<SearchItem> getActorCreditsCast(int actorId) {
-        Iterable<Integer> m = new ArrayList<>();
+        return map(this::parseSearchItemDto, of(movWebApi.getPersonCreditsCast(actorId)));
     }
-
 }

@@ -27,8 +27,6 @@ public class CastItemDto {
     private final String character;
     private final String name;
 
-
-
     public CastItemDto(int id, int movieId, String character, String name) {
         this.id = id;
         this.movieId = movieId;
@@ -52,15 +50,14 @@ public class CastItemDto {
         return movieId;
     }
 
-//
-//    @Override
-//    public String toString() {
-//        return "CastItem{" +
-//                "id=" + id +
-//                ", movieId=" + movieId +
-//                ", character='" + character + '\'' +
-//                ", name='" + name + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "CastItem{" +
+                "id=" + id +
+                ", movieId=" + movieId +
+                ", character='" + character + '\'' +
+                ", name='" + name +
+                '}';
+    }
 
 }

@@ -22,7 +22,6 @@ package movlazy.dto;
  *         created on 04-08-2017
  */
 public class MovieDto {
-
     private final int id;
     private final String original_title;
     private final String tagline;

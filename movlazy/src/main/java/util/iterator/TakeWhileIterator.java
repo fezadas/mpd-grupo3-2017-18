@@ -10,6 +10,7 @@ import static util.Box.empty;
 import static util.Box.of;
 
 public class TakeWhileIterator<T> implements Iterator<T> {
+
     final Predicate<T> p;
     final Iterator<T> src;
     boolean predicate;

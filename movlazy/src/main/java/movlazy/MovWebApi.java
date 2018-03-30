@@ -90,7 +90,8 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/search/movie?api_key=***************&query=war+games
      */
     public SearchItemDto[] search(String title, int page) {
-        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_SEARCH,MOVIE_DB_TOKEN, title.replaceAll(" ", "+"), page);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_SEARCH, MOVIE_DB_TOKEN,
+                title.replaceAll(" ", "+"), Long.toString(page));
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         SearchDto dto = gson.fromJson(json, SearchDto.class);
@@ -101,7 +102,7 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/movie/860?api_key=***************
      */
     public MovieDto getMovie(int id) {
-        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE,MOVIE_DB_TOKEN,id);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE, MOVIE_DB_TOKEN, Long.toString(id));
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         return gson.fromJson(json, MovieDto.class);
@@ -111,8 +112,7 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/movie/860/credits?api_key=***************
      */
     public CastItemDto[] getMovieCast(int movieId) {
-
-        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE_CREDITS,MOVIE_DB_TOKEN, movieId);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE_CREDITS, MOVIE_DB_TOKEN, Long.toString(movieId));
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         CastDto dto = gson.fromJson(json, CastDto.class);
@@ -123,7 +123,7 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/person/4756?api_key=***************
      */
     public PersonDto getPerson(int personId) {
-        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON,MOVIE_DB_TOKEN,personId);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON, MOVIE_DB_TOKEN, Long.toString(personId));
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         return gson.fromJson(json, PersonDto.class);
@@ -133,10 +133,10 @@ public class MovWebApi {
      * E.g. https://api.themoviedb.org/3/person/4756/movie_credits?api_key=***************
      */
     public SearchItemDto[] getPersonCreditsCast(int personId) {
-        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON_CREDITS,MOVIE_DB_TOKEN,personId);
+        String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON_CREDITS, MOVIE_DB_TOKEN, Long.toString(personId));
         Iterable<String> scr = () -> new InputStreamIterator(() -> req.getBody(url));
         String json = reduce(scr, "", (prev, curr) -> prev+curr );
         SearchDto dto = gson.fromJson(json, SearchDto.class);
-        return dto.getResults();
+        return dto.getCast();
     }
 }

@@ -27,7 +27,6 @@ import java.net.URL;
  */
 public class HttpRequest implements IRequest {
 
-
     @Override
     public InputStream getBody(String path) {
         try {

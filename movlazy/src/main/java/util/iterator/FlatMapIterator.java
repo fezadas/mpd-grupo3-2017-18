@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class FlatMapIterator<T,R> implements Iterator<R> {
+
     final Function<T, Iterable<R>> mapper;
     final Iterator<T> src;
     private Iterator<R> currScr;
@@ -37,7 +38,7 @@ public class FlatMapIterator<T,R> implements Iterator<R> {
         if (!hasNext()) throw new NoSuchElementException();
         consumed = true;
         R val = currValue;
-        if(!currScr.hasNext())currValue=null;
+        if(!currScr.hasNext()) currValue = null;
         return val;
     }
 }
