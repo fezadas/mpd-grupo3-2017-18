@@ -31,11 +31,8 @@ import util.iterator.ArrayIterator;
 import java.lang.reflect.Array;
 import java.util.*;
 
-import static util.Queries.flatMap;
-import static util.Queries.iterate;
-import static util.Queries.map;
-import static util.Queries.of;
-import static util.Queries.takeWhile;
+import static java.util.Arrays.asList;
+import static util.Queries.*;
 
 /**
  * @author Miguel Gamboa
@@ -98,6 +95,7 @@ public class MovService {
         return cast.computeIfAbsent(movId, id -> {
             CastItemDto[] cast = movWebApi.getMovieCast(id);
             //return map(this::parseCastItemDto, of(cast));     //FIXME
+
             List<CastItem> castItemList = new LinkedList<>();
             for (CastItemDto elem : cast) {
                 castItemList.add(
@@ -109,20 +107,21 @@ public class MovService {
                                 () -> getActor(elem.getId(), elem.getName())));
             }
             return castItemList;
+
         });
     }
 
-    /*
-    private CastItem parseCastItemDto(CastItem dto) {
+
+    private CastItem parseCastItemDto(CastItemDto dto) {
         return new CastItem(
                 dto.getId(),
                 dto.getMovieId(),
                 dto.getCharacter(),
                 dto.getName(),
-                dto::getActor
+                () -> getActor(dto.getId(), dto.getName())
         );
     }
-    */
+
 
     public Actor getActor(int actorId, String name) {
         return actors.computeIfAbsent(actorId, id -> {
@@ -132,7 +131,7 @@ public class MovService {
                     person.getName(), //FIXME: name?
                     person.getPlace_of_birth(),
                     person.getBiography(),
-                    () -> getActorCreditsCast(actorId)); //TODO: alterou-se para suppiler, é possivel?
+                    () -> getActorCreditsCast(actorId).iterator());
         });
     }
 

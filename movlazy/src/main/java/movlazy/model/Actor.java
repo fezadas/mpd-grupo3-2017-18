@@ -9,11 +9,11 @@ import java.util.function.Supplier;
 public class Actor {
     private final int id;
     private final String name;
-    private final Supplier<Iterable<SearchItem>> movies;
+    private final Iterable<SearchItem> movies;
     private final String placeOfBirth;
     private final String biography;
 
-    public Actor(int id, String name, String placeOfBirth, String biography, Supplier<Iterable<SearchItem>> movies) {
+    public Actor(int id, String name, String placeOfBirth, String biography, Iterable<SearchItem> movies) {
         this.id = id;
         this.name = name;
         this.movies = movies;
@@ -47,7 +47,7 @@ public class Actor {
                 '}';
     }
 
-    public Supplier<Iterable<SearchItem>> getMovies() {
+    public Iterable<SearchItem> getMovies() {
         return movies;
     }
 }

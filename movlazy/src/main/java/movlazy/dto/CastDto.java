@@ -1,4 +1,4 @@
-package movlazy.restdto;
+package movlazy.dto;
 
 import movlazy.dto.CastItemDto;
 

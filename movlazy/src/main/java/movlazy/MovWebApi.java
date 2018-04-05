@@ -22,19 +22,13 @@ import movlazy.dto.CastItemDto;
 import movlazy.dto.MovieDto;
 import movlazy.dto.PersonDto;
 import movlazy.dto.SearchItemDto;
-import movlazy.restdto.CastDto;
-import movlazy.restdto.SearchDto;
+import movlazy.dto.CastDto;
+import movlazy.dto.SearchDto;
 import util.IRequest;
 import util.iterator.InputStreamIterator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.MessageFormat;
 
-import static util.Queries.map;
 import static util.Queries.reduce;
 
 /**
@@ -87,7 +81,7 @@ public class MovWebApi {
     }
 
     /**
-     * E.g. https://api.themoviedb.org/3/search/movie?api_key=***************&query=war+games
+     * E.g. https://api.themoviedb.org/3/search/movie?api_key=9b2f22e97ee512a9d3224d4aa0d8bd39&query=war+games
      */
     public SearchItemDto[] search(String title, int page) {
         String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_SEARCH, MOVIE_DB_TOKEN,
@@ -99,7 +93,7 @@ public class MovWebApi {
     }
 
     /**
-     * E.g. https://api.themoviedb.org/3/movie/860?api_key=***************
+     * E.g. https://api.themoviedb.org/3/movie/860?api_key=9b2f22e97ee512a9d3224d4aa0d8bd39
      */
     public MovieDto getMovie(int id) {
         String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE, MOVIE_DB_TOKEN, Long.toString(id));
@@ -109,7 +103,7 @@ public class MovWebApi {
     }
 
     /**
-     * E.g. https://api.themoviedb.org/3/movie/860/credits?api_key=***************
+     * E.g. https://api.themoviedb.org/3/movie/860/credits?api_key=9b2f22e97ee512a9d3224d4aa0d8bd39
      */
     public CastItemDto[] getMovieCast(int movieId) {
         String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_MOVIE_CREDITS, MOVIE_DB_TOKEN, Long.toString(movieId));
@@ -120,7 +114,7 @@ public class MovWebApi {
     }
 
     /**
-     * E.g. https://api.themoviedb.org/3/person/4756?api_key=***************
+     * E.g. https://api.themoviedb.org/3/person/4756?api_key=9b2f22e97ee512a9d3224d4aa0d8bd39
      */
     public PersonDto getPerson(int personId) {
         String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON, MOVIE_DB_TOKEN, Long.toString(personId));
@@ -130,7 +124,7 @@ public class MovWebApi {
     }
 
     /**
-     * E.g. https://api.themoviedb.org/3/person/4756/movie_credits?api_key=***************
+     * E.g. https://api.themoviedb.org/3/person/4756/movie_credits?api_key=9b2f22e97ee512a9d3224d4aa0d8bd39
      */
     public SearchItemDto[] getPersonCreditsCast(int personId) {
         String url = MessageFormat.format(MOVIE_DB_HOST + MOVIE_DB_PERSON_CREDITS, MOVIE_DB_TOKEN, Long.toString(personId));

@@ -30,19 +30,19 @@ import util.Queries;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static util.Queries.filter;
 import static util.Queries.skip;
 
-
-public class MovServiceTestForWarGames {
+public class MovServiceTestForDeadpool {
 
     @Test
     public void testSearchMovieInSinglePage() {
         MovService movapi = new MovService(new MovWebApi(new HttpRequest()));
-        Iterable<SearchItem> movs = movapi.search("War Games");
+        Iterable<SearchItem> movs = movapi.search("Deadpool");
         SearchItem m = movs.iterator().next();
-        assertEquals("War Games: The Dead Code", m.getTitle());
-        assertEquals(6, Queries.count(movs));// number of returned movies
+        assertEquals("Deadpool", m.getTitle());
+        assertEquals(7, Queries.count(movs));// number of returned movies
     }
 
     @Test
@@ -53,17 +53,17 @@ public class MovServiceTestForWarGames {
                 .compose(__ -> count[0]++);
 
         MovService movapi = new MovService(new MovWebApi(req));
-        Iterable<SearchItem> movs = movapi.search("candle");
+        Iterable<SearchItem> movs = movapi.search("games");
         assertEquals(0, count[0]);
         SearchItem candleshoe =
                 filter(
-                        m -> m.getTitle().equals("Candleshoe"),
+                        m -> m.getTitle().equals("Deadly Games"),
                         movs)
-                .iterator()
-                .next();
-        assertEquals(2, count[0]); // Found on 2nd page
-        assertEquals(59, Queries.count(movs));// Number of returned movies
-        assertEquals(6, count[0]); // 4 requests more to consume all pages
+                        .iterator()
+                        .next();
+        assertEquals(3, count[0]); // Found on 2nd page
+        assertEquals(291, Queries.count(movs));// Number of returned movies
+        assertEquals(19, count[0]); //TODO: perceber os 4 requests more to consume all pages. 15 pages
     }
 
     @Test
@@ -74,9 +74,9 @@ public class MovServiceTestForWarGames {
                 .compose(__ -> count[0]++);
 
         MovWebApi movWebApi = new MovWebApi(req);
-        SearchItemDto[] actorMovs = movWebApi.getPersonCreditsCast(4756);
+        SearchItemDto[] actorMovs = movWebApi.getPersonCreditsCast(72129);
         assertNotNull(actorMovs);
-        assertEquals("Ladyhawke", actorMovs[1].getTitle());
+        assertEquals("Garden Party", actorMovs[1].getTitle());
         assertEquals(1, count[0]); // 1 request
     }
 
@@ -91,64 +91,61 @@ public class MovServiceTestForWarGames {
 
         MovService movapi = new MovService(new MovWebApi(req));
 
-        Iterable<SearchItem> vs = movapi.search("War Games");
-        assertEquals(6, Queries.count(vs));// number of returned movies
-        assertEquals(2, count[0]);         // 2 requests to consume all pages
+        Iterable<SearchItem> vs = movapi.search("hulk");
+        assertEquals(25, Queries.count(vs));// number of returned movies
+        assertEquals(3, count[0]);         // 2 requests to consume all pages
         /**
          * Iterable<SearchItem> is Lazy and without cache.
          */
-        SearchItem warGames = filter(
-                    m -> m.getTitle().equals("WarGames"),
-                    vs)
+        SearchItem hulk = filter(
+                m -> m.getTitle().equals("Shamelessly She-Hulk"),
+                vs)
                 .iterator()
                 .next();
-        assertEquals(3, count[0]); // 1 more request for 1st page
-        assertEquals(860, warGames .getId());
-        assertEquals("WarGames", warGames.getTitle());
-        assertEquals(3, count[0]); // Keep the same number of requests
+        assertEquals(4, count[0]); // 4 because the movie is in the second page
+        assertEquals(421831, hulk.getId());
+        assertEquals("Shamelessly She-Hulk", hulk.getTitle());
+        assertEquals(4, count[0]); // Keep the same number of requests
         /**
          * getDetails() relation SearchItem ---> Movie is Lazy and supported on Supplier<Movie> with Cache
          */
-        assertEquals("WarGames", warGames.getDetails().getOriginalTitle());
-        assertEquals(4, count[0]); // 1 more request to get the Movie
-        assertEquals("Is it a game, or is it real?", warGames.getDetails().getTagline());
-        assertEquals(4, count[0]); // NO more request. It is already in cache
+        assertEquals("Shamelessly She-Hulk", hulk.getDetails().getOriginalTitle());
+        assertEquals(5, count[0]); // 1 more request to get the Movie
+        assertEquals("", hulk.getDetails().getTagline());
+        assertEquals(5, count[0]); // NO more request. It is already in cache
         /**
          * getCast() relation Movie --->* CastItem is Lazy and
          * supported on Supplier<List<CastItem>> with Cache
          */
-        Iterable<CastItem> warGamesCast = warGames.getDetails().getCast();
-        assertEquals(5, count[0]); // 1 more request to get the Movie Cast
-        assertEquals("Matthew Broderick",
-                warGamesCast.iterator().next().getName());
-        assertEquals(5, count[0]); // NO more request. It is already in cache
-        assertEquals("Ally Sheedy",
-                skip(warGamesCast, 2).iterator().next().getName());
-        assertEquals(5, count[0]); // NO more request. It is already in cache
+        Iterable<CastItem> hulkCast = hulk.getDetails().getCast();
+        assertEquals(6, count[0]); // 1 more request to get the Movie Cast
+        assertEquals("Kierstyn Elrod",
+                hulkCast.iterator().next().getName());
+        assertEquals(6, count[0]); // NO more request. It is already in cache
+        assertEquals("John Nania",
+                skip(hulkCast, 2).iterator().next().getName());
+        assertEquals(6, count[0]); // NO more request. It is already in cache
         /**
          * CastItem ---> Actor is Lazy and with Cache for Person but No cache for actor credits
          */
-        CastItem broderick = warGames.getDetails().getCast().iterator().next();
-        assertEquals(5, count[0]); // NO more request. It is already in cache
-        assertEquals("New York City, New York, USA",
-                broderick.getActor().getPlaceOfBirth());
-        assertEquals(6, count[0]); // 1 more request for Actor Person
-        assertEquals("New York City, New York, USA",
-                broderick.getActor().getPlaceOfBirth());
+        CastItem kierstyn = hulk.getDetails().getCast().iterator().next();
         assertEquals(6, count[0]); // NO more request. It is already in cache
-        assertEquals("Inspector Gadget",
-                broderick.getActor().getMovies().iterator().next().getTitle());
-        assertEquals(7, count[0]); // 1 more request for Actor Credits
-        assertEquals("Inspector Gadget",
-                broderick.getActor().getMovies().iterator().next().getTitle());
-        assertEquals(8, count[0]); // 1 more request. Actor Cast is not in cache
+        assertNull(kierstyn.getActor().getPlaceOfBirth()); //person page does not have place of birth information.
+        assertEquals(7, count[0]); // 1 more request for Actor Person
+        assertNull(kierstyn.getActor().getPlaceOfBirth()); //person page does not have place of birth information.
+        assertEquals(7, count[0]); // NO more request. It is already in cache
+        assertEquals("Shamelessly She-Hulk",
+                kierstyn.getActor().getMovies().iterator().next().getTitle());
+        assertEquals(8, count[0]); // 1 more request for Actor Credits
+        assertEquals("Shamelessly She-Hulk",
+                kierstyn.getActor().getMovies().iterator().next().getTitle());
+        assertEquals(9, count[0]); // 1 more request. Actor Cast is not in cache
 
         /**
          * Check Cache from the beginning
          */
-        assertEquals("New York City, New York, USA",
-                movapi.getMovie(860).getCast().iterator().next().getActor().getPlaceOfBirth());
-        assertEquals(8, count[0]); // No more requests for the same getMovie.
+        assertNull(movapi.getMovie(421831).getCast().iterator().next().getActor().getPlaceOfBirth());
+        assertEquals(9, count[0]); // No more requests for the same getMovie.
         /*
          * Now get a new Film
          */
