@@ -172,4 +172,15 @@ public class Queries {
         }
         return res.toArray();
     }
+
+    /**
+     * Returns a list containing the elements of the src Iterable.
+     */
+    public static <T> List<T> toList(Iterable<T> src) {
+        List<T> res = new ArrayList<>();
+        for (T item : src) {
+            res.add(item);
+        }
+        return res;
+    }
 }

@@ -92,25 +92,12 @@ public class MovService {
     }
 
     public List<CastItem> getMovieCast(int movId) {
-        return cast.computeIfAbsent(movId, id -> {
-            CastItemDto[] cast = movWebApi.getMovieCast(id);
-            //return map(this::parseCastItemDto, of(cast));     //FIXME
-
-            List<CastItem> castItemList = new LinkedList<>();
-            for (CastItemDto elem : cast) {
-                castItemList.add(
-                        new CastItem(
-                                elem.getId(),
-                                id,
-                                elem.getCharacter(),
-                                elem.getName(),
-                                () -> getActor(elem.getId(), elem.getName())));
-            }
-            return castItemList;
-
-        });
+        return cast.computeIfAbsent(
+                movId,
+                id -> toList(
+                        map(this::parseCastItemDto, of(movWebApi.getMovieCast(id))))
+        );
     }
-
 
     private CastItem parseCastItemDto(CastItemDto dto) {
         return new CastItem(
@@ -122,13 +109,12 @@ public class MovService {
         );
     }
 
-
     public Actor getActor(int actorId, String name) {
         return actors.computeIfAbsent(actorId, id -> {
             PersonDto person = movWebApi.getPerson(actorId);
             return new Actor(
                     person.getId(),
-                    person.getName(), //FIXME: name?
+                    person.getName(),
                     person.getPlace_of_birth(),
                     person.getBiography(),
                     () -> getActorCreditsCast(actorId).iterator());
