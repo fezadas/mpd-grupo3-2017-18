@@ -24,6 +24,10 @@ import movlazy.dto.SearchItemDto;
 import movlazy.model.CastItem;
 import movlazy.model.SearchItem;
 import org.junit.jupiter.api.Test;
+<<<<<<< HEAD
+import util.FileRequest;
+=======
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
 import util.HttpRequest;
 import util.IRequest;
 import util.Queries;
@@ -38,7 +42,14 @@ public class MovServiceTestForHulk {
 
     @Test
     public void testSearchMovieInSinglePage() {
+<<<<<<< HEAD
+        MovService movapi = new MovService(new MovWebApi(
+                new FileRequest()
+                .compose(System.out::println)
+        ));
+=======
         MovService movapi = new MovService(new MovWebApi(new HttpRequest()));
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
         Iterable<SearchItem> movs = movapi.search("Deadpool");
         SearchItem m = movs.iterator().next();
         assertEquals("Deadpool", m.getTitle());
@@ -48,8 +59,13 @@ public class MovServiceTestForHulk {
     @Test
     public void testSearchMovieManyPages() {
         int[] count = {0};
+<<<<<<< HEAD
+        IRequest req = new FileRequest()
+                .compose(System.out::println)
+=======
         IRequest req = new HttpRequest()
                 // .compose(System.out::println)
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
                 .compose(__ -> count[0]++);
 
         MovService movapi = new MovService(new MovWebApi(req));
@@ -60,15 +76,25 @@ public class MovServiceTestForHulk {
                 movs)
                 .iterator()
                 .next();
+<<<<<<< HEAD
+        assertEquals(2, count[0]); // Found on 3rd page
+        assertEquals(291, Queries.count(movs));
+        assertEquals(18, count[0]); //TODO: perceber os 4 requests more to consume all pages. 15 pages
+=======
         assertEquals(3, count[0]); // Found on 3rd page
         assertEquals(291, Queries.count(movs));
         assertEquals(19, count[0]); //TODO: perceber os 4 requests more to consume all pages. 15 pages
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
     }
 
     @Test
     public void testMovieDbApiGetActor() {
         int[] count = {0};
+<<<<<<< HEAD
+        IRequest req = new FileRequest()
+=======
         IRequest req = new HttpRequest()
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
                 // .compose(System.out::println)
                 .compose(__ -> count[0]++);
 
@@ -135,8 +161,13 @@ public class MovServiceTestForHulk {
         //person page does not have place of birth information
         assertEquals(9, count[0]);
 
+<<<<<<< HEAD
+        assertEquals("Shamelessly She-Hulk",
+                movapi.getMovie(2155).getCast().iterator().next().getActor().getMovies().iterator().next().getTitle());
+=======
         assertEquals("Reindeer Games",
                 movapi.getMovie(2155).getCast().iterator().next().getActor().getMovies().iterator().next().getTitle()); //FIXME: supplier
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
         assertEquals(13, count[0]);
     }
 
@@ -144,7 +175,11 @@ public class MovServiceTestForHulk {
     public void testSearchMovieWithManyPages() {
         final RateLimiter rateLimiter = RateLimiter.create(3.0);
         final int[] count = {0};
+<<<<<<< HEAD
+        IRequest req = new FileRequest()
+=======
         IRequest req = new HttpRequest()
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
                 .compose(__ -> count[0]++)
                 .compose(System.out::println)
                 .compose(__ -> rateLimiter.acquire());
@@ -152,10 +187,6 @@ public class MovServiceTestForHulk {
         MovService movapi = new MovService(new MovWebApi(req));
 
         Iterable<SearchItem> vs = movapi.search("water");
-        assertEquals(863, Queries.count(vs));
-        assertEquals(45, count[0]);
-    }
-}
         assertEquals(863, Queries.count(vs));
         assertEquals(45, count[0]);
     }

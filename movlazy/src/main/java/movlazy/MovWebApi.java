@@ -22,8 +22,8 @@ import movlazy.dto.CastItemDto;
 import movlazy.dto.MovieDto;
 import movlazy.dto.PersonDto;
 import movlazy.dto.SearchItemDto;
-import movlazy.restdto.CastDto;
-import movlazy.restdto.SearchDto;
+import movlazy.dto.CastDto;
+import movlazy.dto.SearchDto;
 import util.IRequest;
 import util.iterator.InputStreamIterator;
 

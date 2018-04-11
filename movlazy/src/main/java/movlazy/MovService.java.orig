@@ -98,7 +98,10 @@ public class MovService {
                         map(this::parseCastItemDto, of(movWebApi.getMovieCast(id))))
         );
     }
-    private CastItem parseCastItemDto(CastItemDto dto) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2e397bea36c2da04a0fdbb0d981fbcaf874b2092
     private CastItem parseCastItemDto(CastItemDto dto) {
         return new CastItem(
                 dto.getId(),
