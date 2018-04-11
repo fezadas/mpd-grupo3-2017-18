@@ -34,6 +34,7 @@ import java.util.*;
 import static java.util.Arrays.asList;
 import static util.Queries.*;
 
+
 /**
  * @author Miguel Gamboa
  *         created on 02-03-2017
@@ -98,7 +99,6 @@ public class MovService {
                         map(this::parseCastItemDto, of(movWebApi.getMovieCast(id))))
         );
     }
-    private CastItem parseCastItemDto(CastItemDto dto) {
     private CastItem parseCastItemDto(CastItemDto dto) {
         return new CastItem(
                 dto.getId(),

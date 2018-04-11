@@ -156,7 +156,3 @@ public class MovServiceTestForHulk {
         assertEquals(45, count[0]);
     }
 }
-        assertEquals(863, Queries.count(vs));
-        assertEquals(45, count[0]);
-    }
-}
