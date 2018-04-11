@@ -137,10 +137,10 @@ public class MovServiceTestForWarGames {
                 broderick.getActor().getPlaceOfBirth());
         assertEquals(6, count[0]); // NO more request. It is already in cache
         assertEquals("Inspector Gadget",
-                broderick.getActor().getMovies().get().iterator().next().getTitle()); //FIXME: supplier
+                broderick.getActor().getMovies().iterator().next().getTitle());
         assertEquals(7, count[0]); // 1 more request for Actor Credits
         assertEquals("Inspector Gadget",
-                broderick.getActor().getMovies().get().iterator().next().getTitle()); //FIXME: supplier
+                broderick.getActor().getMovies().iterator().next().getTitle());
         assertEquals(8, count[0]); // 1 more request. Actor Cast is not in cache
 
         /**
@@ -153,7 +153,7 @@ public class MovServiceTestForWarGames {
          * Now get a new Film
          */
         assertEquals("Predator",
-                movapi.getMovie(861).getCast().iterator().next().getActor().getMovies().get().iterator().next().getTitle()); //FIXME: supplier
+                movapi.getMovie(861).getCast().iterator().next().getActor().getMovies().iterator().next().getTitle()); //FIXME: supplier
         assertEquals(12, count[0]); // 1 request for Movie + 1 for CastItems + 1 Person + 1 Actor Credits
     }
 

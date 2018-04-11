@@ -3,7 +3,7 @@ package movlazy.restdto;
 import movlazy.dto.SearchItemDto;
 
 public class SearchDto {
-    private final SearchItemDto[] results, cast; //FIXME: usado para dois pedidos diferentes. apenas um usado.
+    private final SearchItemDto[] results, cast;
 
     public SearchDto(SearchItemDto[] results, SearchItemDto[] cast) {
         this.results = results;
